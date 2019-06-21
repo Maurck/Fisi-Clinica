@@ -542,21 +542,22 @@ bool existe_cita(int codigoCit, Cita *cit) {
 	return existe;
 }
 
-bool existe_historial(int DNI,Historial *hist){
-	FILE* datosHistorial;
-	bool existe=false;
-	
-	datosHistorial=fopen("Historial.dat","rb");
-	if(!(datosHistorial==NULL)){
-		fread(&(*hist),sizeof(*hist),1,datosHistorial);
-		while(!feof(datosHistorial)){
-			if((*hist).DNI==DNI){
-				existe=true;
+bool existe_historial(int codigo_historial, Historial *hist) {
+	FILE *archivo;
+	bool existe = false;
+
+	archivo = fopen("historial.dat", "rb");
+
+	if (!(archivo == NULL)) {
+		fread(&(*hist), sizeof(*hist), 1, archivo);
+		while (!feof(archivo)) {
+			if ((*hist).codigo == codigo_historial) {
+				existe = true;
 				break;
 			}
-			fread(&(*hist),sizeof(*hist),1,datosHistorial);
+			fread(&(*hist), sizeof(*hist), 1, archivo);
 		}
-		fclose(datosHistorial);
+		fclose(archivo);
 	}
 	return existe;
 }
@@ -879,7 +880,7 @@ void opcion_crear_historial(void){
 		cout<< "\tIngrese codigo del historial: ";
 		codigoHist=obtener_entero();
 		hist.codigo = codigoHist;
-			if (existe_historial(codigoHist, &hist)) {
+		if (existe_historial(codigoHist, &hist)) {
 			cout <<"\n\tEste historial ya existe"<<endl;
 		}else{	
 		cout << "\tApellido Paterno: ";
