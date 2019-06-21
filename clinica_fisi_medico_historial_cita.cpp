@@ -235,7 +235,8 @@ void opcion_agregar_cita(){
 			cout << "\tIngresa el DNI del usuario: ";
 			DNI = obtener_entero();
 		
-			if (existe_historial(DNI,&hist)) {
+			if (existe_historial(DNI,&hist)) 
+			{
 		
 			cit.codigoCit = codigoCit;
 			cit.DNI = DNI;
@@ -273,6 +274,7 @@ void opcion_agregar_cita(){
 				if(!existe_especialidad(cit.Especialidad))
 				{
 					cout<<"\n\tEspecialidad no disponible"<<endl;
+					cout<<"\n\t";
 					system("pause");
 			
 				}else
@@ -303,70 +305,72 @@ void opcion_agregar_cita(){
 			
 			if(existe_especialidad(cit.Especialidad))
 			{			
-			cout << "\n\tDigite la fecha de la cita: ";
-			
-			cout<<"\n\tDia: ";
-			fCita.dia = obtener_entero();
-			cout<<"\tMes: ";
-			fCita.mes = obtener_entero();
-			cout<<"\tAño: ";
-			fCita.anio = obtener_entero();
-			
-			do{
-				system("cls");
-				titulo_principal();
-				cout << "\n\t\tCREAR NUEVA CITA\n";
-				cout << "\tIngresa el Codigo de la cita: "<<codigoCit<<endl;
-				cout << "\tIngresa el DNI del usuario: "<<DNI<<endl;
-					
-				cout<<"\n\tSeleccione la Especialidad: "<<endl;
-			
-				cout<<"\n\t1.- Medicina General."<<endl;
-				cout<<"\t2.- Pediatria."<<endl;
-				cout<<"\t3.- Ginecologia."<<endl;
-				cout<<"\tDigite la opcion: "<<opcionTipoEsp<<endl;
-				
 				cout << "\n\tDigite la fecha de la cita: ";
-				cout<<"\n\tDia: "<<fCita.dia;
-				cout<<"\n\tMes: "<<fCita.mes;
-				cout<<"\n\tAño: "<<fCita.anio;
-				
-				cout<< "\n\tDigite la hora de la cita: ";
 			
-				cout<<"\n\tHora: ";
-				fCita.hora = obtener_entero();
-				cout<<"\tMinutos: ";
-				fCita.minutos = obtener_entero();
+				cout<<"\n\tDia: ";
+				fCita.dia = obtener_entero();
+				cout<<"\tMes: ";
+				fCita.mes = obtener_entero();
+				cout<<"\tAño: ";
+				fCita.anio = obtener_entero();
 			
-				cit.fechaCita.minutos = fCita.minutos;
-				cit.fechaCita.hora = fCita.hora;
-				cit.fechaCita.dia = fCita.dia;
-				cit.fechaCita.mes = fCita.mes;
-				cit.fechaCita.anio = fCita.anio;
-				fflush(stdin);
+				do{
+					system("cls");
+					titulo_principal();
+					cout << "\n\t\tCREAR NUEVA CITA\n";
+					cout << "\tIngresa el Codigo de la cita: "<<codigoCit<<endl;
+					cout << "\tIngresa el DNI del usuario: "<<DNI<<endl;
+					
+					cout<<"\n\tSeleccione la Especialidad: "<<endl;
+			
+					cout<<"\n\t1.- Medicina General."<<endl;
+					cout<<"\t2.- Pediatria."<<endl;
+					cout<<"\t3.- Ginecologia."<<endl;
+					cout<<"\tDigite la opcion: "<<opcionTipoEsp<<endl;
 				
-				if(!doctor_libre(cit.Especialidad,fCita))
-				{	
-					cout<<"\n\tEl doctor no esta disponible a esa hora, digite otra ";
-					cout<<"\n\t";
-					system("pause");
+					cout << "\n\tDigite la fecha de la cita: ";
+					cout<<"\n\tDia: "<<fCita.dia;
+					cout<<"\n\tMes: "<<fCita.mes;
+					cout<<"\n\tAño: "<<fCita.anio;
+				
+					cout<< "\n\tDigite la hora de la cita: ";
+			
+					cout<<"\n\tHora: ";
+					fCita.hora = obtener_entero();
+					cout<<"\tMinutos: ";
+					fCita.minutos = obtener_entero();
+			
+					cit.fechaCita.minutos = fCita.minutos;
+					cit.fechaCita.hora = fCita.hora;
+					cit.fechaCita.dia = fCita.dia;
+					cit.fechaCita.mes = fCita.mes;
+					cit.fechaCita.anio = fCita.anio;
+					fflush(stdin);
+				
+					if(!doctor_libre(cit.Especialidad,fCita))
+					{	
+						cout<<"\n\tEl doctor no esta disponible a esa hora, digite otra ";
+						cout<<"\n\t";
+						system("pause");
+					}
+			
+				}while(!doctor_libre(cit.Especialidad,fCita));
+			
+				if(!fecha_valida(fCita) || !fecha_rango_valido(fCita) || !hora_rango_valido(fCita))
+				{
+					cout << "\n\tLa fecha de la cita es incorrecta." << endl;	
+				}else if (insertar_cita_archivo(cit)) 
+				{
+					cout << "\n\tLa cita fue creada satisfactoriamente" << endl;
+				}else
+				{
+					cout<< "\n\tLa cita no se pudo crear correctamente, intentelo mas tarde " << endl;
 				}
-			
-			}while(!doctor_libre(cit.Especialidad,fCita));
-			
-			if(!fecha_valida(fCita) || !fecha_rango_valido(fCita) || !hora_rango_valido(fCita))
-			{
-				cout << "\n\tLa fecha de la cita es incorrecta." << endl;	
-			}else if (insertar_cita_archivo(cit)) {
-				cout << "\n\tLa cita fue creada satisfactoriamente" << endl;
-			} else {
-				cout<< "\n\tLa cita no se pudo crear correctamente, intentelo mas tarde " << endl;
-			}
-				}	
+			}	
 		} else {
 			cout << "\n\tEl paciente no existe" << endl;
-				cout << "\tIntentelo nuevamente" << endl;
-		}
+			cout << "\tIntentelo nuevamente" << endl;
+				}
 		}
 		
 		cout << "\n\tDesea continuar? [S/n]: ";
