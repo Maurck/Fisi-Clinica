@@ -1303,7 +1303,7 @@ float promedio;
 	titulo_principal();
 	historiales = obtener_his_archivo(&num_histo);
 
-		cout << "\n\t\t\t\ EDAD PROMEDIO\n";
+		cout << "\n\t\t\t EDAD PROMEDIO\n";
 		cout << "\n\t   ------------------------------------------------------------\n";
 		for (int i = 0; i < num_histo; i++) {
 				sumaEdad=sumaEdad+historiales[i].Edad;
