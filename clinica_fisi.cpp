@@ -32,11 +32,7 @@ struct Paciente{
 
 struct Historial{
 	int codigoHist;
-	int codigoCit;
-	char signos[200];
-	char sintomas[200];
-	char resultados[200];
-	char diagnostico[200];
+	int DNI;
 	Fecha fechaHist;
 };
 
@@ -57,6 +53,16 @@ struct Cita {
 	char Especialidad[25];
 	Fecha fechaCita;
 	Hora horaCita;
+};
+
+struct Consulta{
+	
+	int codigoHist;
+	char signos[200];
+	char sintomas[200];
+	char resultados[200];
+	char diagnostico[200];
+	
 };
 
 struct Receta{
@@ -88,6 +94,26 @@ bool existe_paciente(int DNI,Paciente *pac);
 
 void opcion_mostrar_paciente();
 Paciente *obtener_pac_archivo(int *n);
+
+
+void menu_consulta();
+void menu_consulta_opciones(void);
+
+void opcion_realizar_consulta();
+bool insertar_consulta_archivo(Consulta cons);
+bool existe_consulta(int DNI,Paciente *pac);
+
+void opcion_mostrar_consulta();
+Consulta *obtener_cons_archivo(int *n);
+
+
+void menu_receta();
+void menu_receta_opciones(void);
+
+bool insertar_receta_archivo(Receta rec);
+
+void opcion_mostrar_receta();
+Receta *obtener_rec_archivo(int *n);
 
 
 void menu_historial();
@@ -146,7 +172,7 @@ void menu_principal() {
 
 	do {
 		menu_principal_opciones();
-		opcion = obtener_entero(1,4);
+		opcion = obtener_entero(1,7);
 
 		switch (opcion) {
 			case 1:
@@ -159,9 +185,15 @@ void menu_principal() {
 				menu_cita();
 				break;
 			case 4:
-				menu_historial();
+				menu_consulta();
 				break;
 			case 5:
+				menu_historial();
+				break;
+			case 6:
+				menu_receta();
+				break;
+			case 7:
 				se_repite = false;
 				break;
 		}
@@ -175,8 +207,10 @@ void menu_principal_opciones(void) {
 	cout << "\n\t\t[1]. Medicos\n";
 	cout << "\t\t[2]. Pacientes\n";
 	cout << "\t\t[3]. Cita\n";
-	cout << "\t\t[3]. Historial Medico\n";
-	cout << "\t\t[4]. Salir\n";
+	cout << "\t\t[4]. Consulta\n";
+	cout << "\t\t[5]. Historial Medico\n";
+	cout << "\t\t[6]. Recetas\n";
+	cout << "\t\t[7]. Salir\n";
 	cout << "\n\t\tIngrese una opcion: ";
 }
 
@@ -907,7 +941,9 @@ void opcion_crear_historial(void){
 		if (existe_historial(codigoHist, &hist)) {
 			cout <<"\n\tEste historial ya existe"<<endl;
 		}
-		else{	
+		else{
+		
+			
 		  
         if (insertar_historial_archivo(hist)) {
 				cout << "\n\tEl Historial fue creado satisfactoriamente" << endl;
@@ -1074,7 +1110,7 @@ void menu_historial() {
 void menu_paciente() {
 	bool repetir = true;
 	FILE* archivo;
-	char paciente[20]="pacientes.dat";
+	char paciente[20]="paciente.dat";
 	int opcion;
 
 	do {
@@ -1183,11 +1219,8 @@ void opcion_crear_paciente(void){
        	cout<<"\tAnio: ";
        	cin>>fNac.anio;
 		pac.Fecha_Nac.anio = fNac.anio;
+		fflush(stdin);
 		
-        cout<< "\tDNI: ";
-        fflush(stdin);
-		dni=obtener_entero();
-        pac.DNI=dni;
         cout<< "\tTelefono: ";
         telef=obtener_entero();
         pac.telefono=telef;
@@ -1313,7 +1346,7 @@ Paciente *obtener_pac_archivo(int *n) {
 	Paciente *pacientes;
 	int i;
 
-	archivo = fopen("historial.dat", "rb");
+	archivo = fopen("paciente.dat", "rb");
 
 	if (archivo == NULL) {
 		*n = 0;
@@ -1335,6 +1368,268 @@ Paciente *obtener_pac_archivo(int *n) {
 	return pacientes;
 }
 
+void menu_consulta() {
+	bool repetir = true;
+	FILE* archivo;
+	char consulta[20]="consulta.dat";
+	int opcion;
+
+	do {
+		menu_consulta_opciones();
+		opcion = obtener_entero(1,3);
+		switch (opcion) {					
+			case 1:
+				opcion_crear_archivo(archivo,consulta);
+				break;
+			case 2:
+				opcion_realizar_consulta();
+				break;
+			case 3:
+				repetir = false;
+				break;
+		}
+	} while (repetir);
+}
+
+void menu_consulta_opciones(void) {
+	system("cls");
+	titulo_principal();
+	cout << "\n\t\t\t\tMENU CONSULTA\n";
+	cout << "\n\t\t[1]. Crear archivo consulta\n";
+	cout << "\t\t[2]. Realizar consulta\n";
+	cout << "\t\t[3]. Volver al menu principal\n";
+	cout << "\n\t\tIngrese una opcion: ";
+}
+
+void opcion_realizar_consulta(void){
+	
+	int codigoCit;
+	bool repetir;
+	string signos,sintomas,resultados,diagnostico,medicamentos,instrucciones,respuesta;
+	Cita cit;
+	Consulta cons;
+	Receta rec;
+	
+	do {
+		system("cls");
+		titulo_principal();
+		cout << "\n\t\tREALIZAR CONSULTA\n";
+		cout<< "\tIngrese el codigo de la cita: ";
+		codigoCit=obtener_entero();
+		
+		if (!existe_cita(codigoCit, &cit)) {
+			cout <<"\n\tNo ha sacado cita aun."<<endl;
+		}else{
+			
+		cons.codigoHist = cit.DNI;
+		
+		cout << "\tIngrese los signos: ";
+		getline(cin,signos);
+		strcpy(cons.signos,signos.c_str());
+		
+		cout << "\tIngrese los sintomas: ";
+		getline(cin,sintomas);
+		strcpy(cons.signos,sintomas.c_str());
+		
+		cout<< "\tIngrese los resultados: ";
+        getline(cin,resultados);
+        strcpy(cons.resultados,resultados.c_str());
+        
+        cout<< "\tIngrese el diagnostico: ";
+        getline(cin,diagnostico);
+        strcpy(cons.diagnostico,diagnostico.c_str());
+        fflush(stdin);
+
+        if (insertar_consulta_archivo(cons)) {
+				cout << "\n\tLa consulta fue registrada satisfactoriamente." << endl;
+			} else {
+				cout << "\n\tExiste un error al intentar registrar la consulta." << endl;
+				cout << "\n\tIntentelo nuevamente." << endl;
+			}	
+		
+		cout<<"\n\tRECETA: ";
+		
+		rec.codigoCit = codigoCit;
+		
+		cout << "\n\tIngrese los medicamentos: ";
+		getline(cin,medicamentos);
+		strcpy(rec.medicamentos,medicamentos.c_str());
+		
+		cout << "\tIngrese las instrucciones: ";
+		getline(cin,instrucciones);
+		strcpy(rec.instrucciones,instrucciones.c_str());
+
+        if (insertar_receta_archivo(rec)) {
+				cout << "\n\tLa receta fue registrada satisfactoriamente." << endl;
+			} else {
+				cout << "\n\tExiste un error al intentar registrar la receta." << endl;
+				cout << "\n\tIntentelo nuevamente." << endl;
+			}
+		}
+	
+		cout << "\n\tDesea continuar? [S/n]: ";
+		getline(cin, respuesta);
+		if (!(respuesta.compare("s") == 0 || respuesta.compare("S") == 0)) {
+			repetir = false;
+		}
+		
+		menu_paciente();
+	} while (repetir); 
+	
+	menu_principal();   
+}
+
+bool insertar_consulta_archivo(Consulta cons) {
+	FILE *archivo;
+	bool insercion;
+
+	archivo = fopen("consulta.dat", "ab");
+
+	if (archivo == NULL) {
+		insercion = false;
+	} else {
+		fwrite(&cons, sizeof(cons), 1, archivo);
+		insercion = true;
+		fclose(archivo);
+	}
+	return insercion;
+}
+/*
+Consulta *obtener_cons_archivo(int *n) {
+	FILE *archivo;
+	Paciente paciente;
+	Paciente *pacientes;
+	int i;
+
+	archivo = fopen("paciente.dat", "rb");
+
+	if (archivo == NULL) {
+		*n = 0;
+		pacientes = NULL;
+	} else {
+		fseek(archivo, 0, SEEK_END);
+		*n = ftell(archivo) / sizeof(Paciente);
+		pacientes = (Paciente *)malloc((*n) * sizeof(Paciente));
+		fseek(archivo, 0, SEEK_SET);
+		fread(&paciente, sizeof(paciente), 1, archivo);
+		i = 0;
+		while (!feof(archivo)) {
+			pacientes[i] = paciente;
+			fread(&paciente, sizeof(paciente), 1, archivo);
+			i++;
+		}
+		fclose(archivo);
+	}
+	return pacientes;
+}
+*/
+
+void menu_receta() {
+	bool repetir = true;
+	FILE* archivo;
+	char receta[20]="receta.dat";
+	int opcion;
+
+	do {
+		menu_receta_opciones();
+		opcion = obtener_entero(1,3);
+		switch (opcion) {					
+			case 1:
+				opcion_crear_archivo(archivo,receta);
+				break;
+			case 2:
+				opcion_mostrar_receta();
+				break;
+			case 3:
+				repetir = false;
+				break;
+		}
+	} while (repetir);
+}
+
+void menu_receta_opciones(void) {
+	system("cls");
+	titulo_principal();
+	cout << "\n\t\t\t\tMENU RECETA\n";
+	cout << "\n\t\t[1]. Crear archivo receta\n";
+	cout << "\t\t[2]. Mostrar recetas\n";
+	cout << "\t\t[3]. Volver al menu principal\n";
+	cout << "\n\t\tIngrese una opcion: ";
+}
+
+
+bool insertar_receta_archivo(Receta rec) {
+	FILE *archivo;
+	bool insercion;
+
+	archivo = fopen("receta.dat", "ab");
+
+	if (archivo == NULL) {
+		insercion = false;
+	} else {
+		fwrite(&rec, sizeof(rec), 1, archivo);
+		insercion = true;
+		fclose(archivo);
+	}
+	return insercion;
+}
+
+Receta *obtener_rec_archivo(int *n) {
+	FILE *archivo;
+	Receta receta;
+	Receta *recetas;
+	int i;
+
+	archivo = fopen("receta.dat", "rb");
+
+	if (archivo == NULL) {
+		*n = 0;
+		recetas = NULL;
+	} else {
+		fseek(archivo, 0, SEEK_END);
+		*n = ftell(archivo) / sizeof(Receta);
+		recetas = (Receta *)malloc((*n) * sizeof(Receta));
+		fseek(archivo, 0, SEEK_SET);
+		fread(&receta, sizeof(receta), 1, archivo);
+		i = 0;
+		while (!feof(archivo)) {
+			recetas[i] = receta;
+			fread(&receta, sizeof(receta), 1, archivo);
+			i++;
+		}
+		fclose(archivo);
+	}
+	return recetas;
+}
+
+void opcion_mostrar_receta() {
+	Receta *recetas;
+	int num_rec;
+
+	system("cls");
+	titulo_principal();
+	recetas = obtener_rec_archivo(&num_rec);
+
+	if (num_rec == 0) {
+		cout << "\n\tEl archivo esta vacio" << endl;
+		pausar_pantalla();
+	} else {
+
+		cout << "\n\t\t\t\tRECETAS REGISTRADAS\n";
+		cout << "\n\t   ------------------------------------------------------------\n";
+		for (int i = 0; i < num_rec; i++) {
+				
+				cout << "\t\tCodigo de cita: "<< recetas[i].codigoCit<< endl;
+				cout << "\n\t\tMedicamentos: ";
+				cout  << "\n\t\t" << recetas[i].medicamentos<< endl;
+				cout << "\n\t\tInstrucciones: ";
+				cout  << "\n\t\t" << recetas[i].instrucciones<< endl;
+
+			cout << "\n\t   ------------------------------------------------------------\n";
+		}
+		pausar_pantalla();
+	}
+}
 
 void titulo_principal(void) {
 	cout << "\n     ======================================================================\n";
