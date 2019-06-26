@@ -1149,7 +1149,7 @@ void opcion_crear_paciente(void){
 	string rspta,apelli1,apelli2,nombres,nacim,cita,problem;
 	string hosp,aler,medi,estad1,segur1,gmail;
 	bool repetir=true;
-	int edad,dni,genero,estado,seguro,dniPac,telef;
+	int edad,genero,estado,seguro,dniPac,telef;
 	string respuesta;
 	Fecha fNac;
 	do {
@@ -1158,10 +1158,10 @@ void opcion_crear_paciente(void){
 		cout << "\n\t\tAGREGAR PACIENTE\n";
 		cout<< "\tIngrese el DNI del paciente: ";
 		dniPac=obtener_entero();
-		pac.DNI = dniPac;
 		if (existe_paciente(dniPac, &pac)) {
 			cout <<"\n\tEste paciente ya existe."<<endl;
-		}else{	
+		}else{
+		pac.DNI = dniPac;	
 		cout << "\tApellido Paterno: ";
 		getline(cin,apelli1);
 		strcpy(pac.Apellido_Paterno,apelli1.c_str());
