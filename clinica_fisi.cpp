@@ -55,8 +55,7 @@ struct Cita {
 	Hora horaCita;
 };
 
-struct Consulta{
-	
+struct Consulta{	
 	int codigoHist;
 	char signos[200];
 	char sintomas[200];
@@ -853,6 +852,7 @@ bool existe_medico(int DNI,Medico *user){
 	return existe;
 }
 void opcion_mostrar_medico(){
+	
 	Medico *medicos;
 	int nro_medicos;
 
@@ -881,6 +881,7 @@ void opcion_mostrar_medico(){
 	
 }
 Medico *obtener_stu_archivo(int *n) {
+	
 	FILE *archivo;
 	Medico medico;
 	Medico *medicos;
@@ -909,6 +910,7 @@ Medico *obtener_stu_archivo(int *n) {
 }
 
 bool modificar_archivo_medico(Medico user) {
+	
 	FILE *archivo;
 	bool modificado;
 	Medico medico;
@@ -1016,6 +1018,7 @@ int obtener_edad(Paciente pac)
 }
 
 bool insertar_historial_archivo(Historial hist) {
+	
 	FILE *archivo;
 	bool insercion;
 
@@ -1032,6 +1035,7 @@ bool insertar_historial_archivo(Historial hist) {
 }
 
 Historial *obtener_his_archivo(int *n) {
+	
 	FILE *archivo;
 	Historial historial;
 	Historial *historiales;
@@ -1060,6 +1064,7 @@ Historial *obtener_his_archivo(int *n) {
 }
 
 void menu_historial_opciones(void) {
+
 	system("cls");
 	titulo_principal();
 	cout << "\n\t\t\t\tMENU HISTORIAL MEDICO\n";
@@ -1068,6 +1073,7 @@ void menu_historial_opciones(void) {
 	cout << "\n\t\tIngrese una opcion: ";
 }
 void menu_historial() {
+	
 	bool repetir = true;
 	int opcion;
 
@@ -1086,6 +1092,7 @@ void menu_historial() {
 }
 
 void menu_paciente() {
+	
 	bool repetir = true;
 	FILE* archivo;
 	char paciente[20]="paciente.dat";
@@ -1112,6 +1119,7 @@ void menu_paciente() {
 }
 
 void menu_paciente_opciones(void) {
+	
 	system("cls");
 	titulo_principal();
 	cout << "\n\t\t\t\tMENU PACIENTES\n";
@@ -1123,6 +1131,7 @@ void menu_paciente_opciones(void) {
 }
 
 void opcion_crear_paciente(void){
+
 	Paciente pac;
 	string rspta,apelli1,apelli2,nombres,nacim,cita,problem;
 	string hosp,aler,medi,estad1,segur1,gmail;
@@ -1174,12 +1183,14 @@ void opcion_crear_paciente(void){
         		strcpy(pac.Estado_Civil,estad1.c_str());
         		break;
 		}
-        cout<< "\tGenero: ";
+       
+	    cout<< "\tGenero: ";
         cout<< "\n\t\tFemenino.....[1]";
         cout<< "\n\t\tMasculino....[2]";
         cout<< "\n\t\tDigite opcion: ";
         genero=obtener_entero(1,2);
-        switch(genero){
+        
+		switch(genero){
         	case 1: 
         		pac.Genero = 'F';
         		break;
@@ -1187,7 +1198,8 @@ void opcion_crear_paciente(void){
         		pac.Genero = 'M';
         		break;
 		}
-        cout<< "\tFecha de Nacimiento: ";
+       
+	    cout<< "\tFecha de Nacimiento: ";
        	cout<<"\n\tDia: ";
     	fNac.dia=obtener_entero(1,31);
        	pac.Fecha_Nac.dia = fNac.dia;
@@ -1219,6 +1231,7 @@ void opcion_crear_paciente(void){
         		strcpy(pac.Seguro,segur1.c_str());
         		break;
 		}
+		
 		fflush(stdin);
         cout<< "\tProblemas Medicos: ";
         getline(cin,problem);
@@ -1232,8 +1245,10 @@ void opcion_crear_paciente(void){
 				cout << "\n\tIntentelo nuevamente." << endl;
 			}	
 		}
+		
 		cout << "\n\tDesea continuar? [S/n]: ";
 		getline(cin, respuesta);
+		
 		if (!(respuesta.compare("s") == 0 || respuesta.compare("S") == 0)) {
 			repetir = false;
 		}
@@ -1245,6 +1260,7 @@ void opcion_crear_paciente(void){
 }
 
 bool existe_paciente(int DNI, Paciente *pac) {
+	
 	FILE *archivo;
 	bool existe = false;
 
@@ -1265,6 +1281,7 @@ bool existe_paciente(int DNI, Paciente *pac) {
 }
 
 bool insertar_paciente_archivo(Paciente pac) {
+	
 	FILE *archivo;
 	bool insercion;
 
@@ -1281,6 +1298,7 @@ bool insertar_paciente_archivo(Paciente pac) {
 }
 
 void opcion_mostrar_paciente() {
+	
 	Paciente *pacientes;
 	int num_pac;
 
@@ -1319,6 +1337,7 @@ void opcion_mostrar_paciente() {
 }
 
 Paciente *obtener_pac_archivo(int *n) {
+	
 	FILE *archivo;
 	Paciente paciente;
 	Paciente *pacientes;
@@ -1347,6 +1366,7 @@ Paciente *obtener_pac_archivo(int *n) {
 }
 
 void menu_consulta() {
+	
 	bool repetir = true;
 	FILE* archivo;
 	char consulta[20]="consulta.dat";
@@ -1370,6 +1390,7 @@ void menu_consulta() {
 }
 
 void menu_consulta_opciones(void) {
+
 	system("cls");
 	titulo_principal();
 	cout << "\n\t\t\t\tMENU CONSULTA\n";
@@ -1463,6 +1484,7 @@ void opcion_realizar_consulta(void){
 }
 
 bool insertar_consulta_archivo(Consulta cons) {
+	
 	FILE *archivo;
 	bool insercion;
 
@@ -1479,6 +1501,7 @@ bool insertar_consulta_archivo(Consulta cons) {
 }
 
 Consulta *obtener_cons_archivo(int *n) {
+	
 	FILE *archivo;
 	Consulta consulta;
 	Consulta *consultas;
@@ -1558,6 +1581,7 @@ bool insertar_receta_archivo(Receta rec) {
 }
 
 Receta *obtener_rec_archivo(int *n) {
+	
 	FILE *archivo;
 	Receta receta;
 	Receta *recetas;
@@ -1615,6 +1639,7 @@ void opcion_mostrar_receta() {
 }
 
 void menu_reportes() { 
+	
 	void menu_principal_opciones();
 	bool se_repite = true;
 	int opcion;
@@ -1982,25 +2007,3 @@ void pausar_pantalla() {
 		cin.get(caracter);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
