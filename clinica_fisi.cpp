@@ -1656,7 +1656,6 @@ Cita *citas;
 int nro_citas;
 
 int c1=0, c2=0, c3=0;
-int contador=1;
 
 char n1[30]="Medicina General", n2[30]="Pediatria", n3[30]="Ginecologia";
 
@@ -1664,6 +1663,7 @@ char n1[30]="Medicina General", n2[30]="Pediatria", n3[30]="Ginecologia";
 	system("cls");
 	titulo_principal();		
 	cout << "\n\t\tESPECIALIDAD MAS SOLICITADA\n";
+	
 	citas = obtener_array_cita(&nro_citas);
 	
 	if (nro_citas == 0) {
@@ -1671,47 +1671,70 @@ char n1[30]="Medicina General", n2[30]="Pediatria", n3[30]="Ginecologia";
 		pausar_pantalla();
 	}
 	else{
+		
 		for(int i=0; i<nro_citas; i++){
 			if(strcmp(citas[i].Especialidad,n1)==0){
-				c1=c1+contador;
+				c1=c1+1;
 			}
 		}
 		for(int i=0; i<nro_citas; i++){
 			if(strcmp(citas[i].Especialidad,n2)==0){
-				c2=c2+contador;
+				c2=c2+1;
 			}
 		}
 		for(int i=0; i<nro_citas; i++){
 			if(strcmp(citas[i].Especialidad,n3)==0){
-				c3=c3+contador;
+				c3=c3+1;
 			}
 		}
 		
 		if((c1==c2)&&(c1==c3)&&(c2==c3)){
-  			cout<<"\n\tTodas las especialidades son solicitadas por igual. ";
+		
+			cout<<"\n\t"<<n1<<" :"<<c1<<endl;
+			cout<<"\t"<<n2<<" :"<<c2<<endl;
+			cout<<"\t"<<n3<<" :"<<c3<<endl;		
+  			cout<<"\n\tTodas las especialidades son solicitadas por igual.";
   			cout<<endl;
  		}
  		else if((c1==c2)&&(c1>c3)&&(c2>c3)){
+ 			cout<<"\n\t"<<n1<<" :"<<c1<<endl;
+			cout<<"\t"<<n2<<" :"<<c2<<endl;
+			cout<<"\t"<<n3<<" :"<<c3<<endl;
  			cout<<"\n\tLas especialidades mas solicitadas son: "<<n1<<" y "<<n2;
  			cout<<endl;
 		}
 		else if((c1==c3)&&(c1>c2)&&(c3>c2)){
+			cout<<"\n\t"<<n1<<" :"<<c1<<endl;
+			cout<<"\t"<<n2<<" :"<<c2<<endl;
+			cout<<"\t"<<n3<<" :"<<c3<<endl;
  			cout<<"\n\tLas especialidades mas solicitadas son: "<<n1<<" y "<<n3;
  			cout<<endl;
 		}
 		else if((c2==c3)&&(c2>c1)&&(c3>c1)){
+			cout<<"\n\t"<<n1<<" :"<<c1<<endl;
+			cout<<"\t"<<n2<<" :"<<c2<<endl;
+			cout<<"\t"<<n3<<" :"<<c3<<endl;
  			cout<<"\n\tLas especialidades mas solicitadas son: "<<n2<<" y "<<n3;
  			cout<<endl;
 		}
  		else if((c1>c2)&&(c1>c3)){
+ 			cout<<"\n\t"<<n1<<" :"<<c1<<endl;
+			cout<<"\t"<<n2<<" :"<<c2<<endl;
+			cout<<"\t"<<n3<<" :"<<c3<<endl;
   			cout<<"\n\tLa especialidad mas solicitada es: "<<n1;
   			cout<<endl;
  		}
  		else if((c2>c1)&&(c2>c3)){
+ 			cout<<"\n\t"<<n1<<" :"<<c1<<endl;
+			cout<<"\t"<<n2<<" :"<<c2<<endl;
+			cout<<"\t"<<n3<<" :"<<c3<<endl;
   			cout<<"\n\tLa especialidad mas solicitada es: "<<n2;
   			cout<<endl;
  		}
  		else{
+ 			cout<<"\n\t"<<n1<<" :"<<c1<<endl;
+			cout<<"\t"<<n2<<" :"<<c2<<endl;
+			cout<<"\t"<<n3<<" :"<<c3<<endl;
   			cout<<"\n\tLa especialidad mas solicitada es: "<<n3;
   			cout<<endl;
  		}	 					
@@ -1959,3 +1982,25 @@ void pausar_pantalla() {
 		cin.get(caracter);
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
