@@ -119,10 +119,6 @@ Receta *obtener_rec_archivo(int *n);
 void menu_historial();
 void menu_historial_opciones(void);
 
-void opcion_crear_historial();
-bool insertar_historial_archivo(Historial hist);
-bool existe_historial(int codigo_historial,Historial *hist);
-
 void opcion_mostrar_historial();
 Historial *obtener_his_archivo(int *n);
 
@@ -936,87 +932,65 @@ bool modificar_archivo_medico(Medico user) {
 	return modificado;
 }
 
-void opcion_crear_historial(void){
-	Historial hist;
-	string rspta,apelli1,apelli2,nombres,nacim,cita,problem;
-	string hosp,aler,medi,estad1,segur1,gmail;
-	bool repetir=true;
-	int edad,dni,genero,estado,seguro,codigoHist,telef;
-	string respuesta;
-	Fecha fNac;
-	do {
-		system("cls");
-		titulo_principal();
-		cout << "\n\t\tCREAR NUEVO HISTORIAL MEDICO\n";
-		cout<< "\tIngrese codigo del historial: ";
-		codigoHist=obtener_entero();
-		hist.codigoHist = codigoHist;
-		
-		if (existe_historial(codigoHist, &hist)) {
-			cout <<"\n\tEste historial ya existe"<<endl;
-		}
-		else{
-		
-			
-		  
-        if (insertar_historial_archivo(hist)) {
-				cout << "\n\tEl Historial fue creado satisfactoriamente" << endl;
-			} else {
-				cout << "\n\tExiste un error al intentar crear el historial." << endl;
-				cout << "\n\tIntentelo nuevamente." << endl;
-			}	
-		}
-		cout << "\n\tDesea continuar? [S/n]: ";
-		getline(cin, respuesta);
-		if (!(respuesta.compare("s") == 0 || respuesta.compare("S") == 0)) {
-			repetir = false;
-		}
-		
-		menu_historial();
-	} while (repetir); 
-	
-	menu_principal();   
-}
 void opcion_mostrar_historial() {
-	Historial *historiales;
-	int num_histo;
 
+	Paciente pac;
+	Cita *cit;
+	Consulta *cons;
+	
+	int dni,num_cit,num_cons;
+	
+	cit = obtener_array_cita(&num_cit);
+	cons = obtener_cons_archivo(&num_cons);
+	
 	system("cls");
 	titulo_principal();
-	historiales = obtener_his_archivo(&num_histo);
-
-	if (num_histo == 0) {
-		cout << "\n\tEl archivo esta vacio" << endl;
-		pausar_pantalla();
-	} else {
-
-		cout << "\n\t\t\t\tHISTORIALES REGISTRADOS\n";
-		cout << "\n\t   ------------------------------------------------------------\n";
-		for (int i = 0; i < num_histo; i++) {
-			/*	
-				cout << "\t\tCodigo: " << historiales[i].codigoHist << endl;
-				cout << "\t\tApellido Paterno: " << historiales[i].Apellido_Paterno << endl;
-				cout << "\t\tApellido Materno: " << historiales[i].Apellido_Materno << endl;
-				cout << "\t\tNombres: " << historiales[i].Nombres << endl;
-				cout << "\t\tEstado Civil: " << historiales[i].Estado_Civil<< endl;
-				cout << "\t\tGenero: " << historiales[i].Genero << endl;
-				cout << "\t\tFecha de Nacimiento: ";
-				cout << "\n\t\tDia: "<<historiales[i].Fecha_Nac.dia<<endl;
-				cout << "\t\tMes: "<<historiales[i].Fecha_Nac.mes<<endl;
-				cout << "\t\tAnio: "<<historiales[i].Fecha_Nac.anio<<endl;
-				cout << "\t\tEdad: "<< historiales[i].Edad<< endl;
-				cout << "\t\tDNI: "<< historiales[i].DNI<< endl;
-				cout << "\t\tTelefono: "<< historiales[i].telefono<<endl;
-				cout << "\t\tSeguro: "<< historiales[i].Seguro<<endl;
-				cout << "\t\tProblemas Medicos: "<< historiales[i].Problemas_Medicos<<endl;
-				cout << "\t\tHospitalizaciones: "<< historiales[i].Hospitalizaciones<<endl;
-				cout << "\t\tAlergias: "<< historiales[i].Alergias<<endl;
-				cout << "\t\tMedicamentos: "<< historiales[i].Medicamentos<<endl;	
-		*/
-			cout << "\n\t   ------------------------------------------------------------\n";
+	
+	cout<<"\n\tDigite el numero de DNI del paciente: ";
+	dni = obtener_entero();
+	
+	if(existe_paciente(dni,&pac))
+	{
+		cout<<"\n\tNombres: "<<pac.Nombres<<endl;
+		cout<<"\tApellido Paterno: "<<pac.Apellido_Paterno<<endl;
+		cout<<"\tApellido Materno: "<<pac.Apellido_Materno<<endl;
+		cout<<"\tEdad: "<<obtener_edad(pac)<<endl;
+		cout<<"\tProblemas medicos: "<<pac.Problemas_Medicos<<endl;
+		
+		
+		for(int i=0;i<num_cit;i++)
+		{
+			if(cit[i].DNI==pac.DNI)
+			{
+				cout<<"\n\tCITA "<<endl;
+				cout<<"\tEspecialidad: "<<cit[i].Especialidad<<endl;
+				cout<<"\tFecha: "<<cit[i].fechaCita.anio<<"/"<<cit[i].fechaCita.mes<<"/"<<cit[i].fechaCita.dia<<endl;
+				cout<<"\tHora: "<<cit[i].horaCita.hora<<":"<<cit[i].horaCita.minutos<<endl;
+				
+				
+			}
 		}
+		
+		for(int j=0;j<num_cons;j++)
+		{
+			if(cons[j].codigoHist==pac.DNI)
+			{
+				cout<<"\n\tCONSULTA"<<endl;
+				cout<<"\tDiagnostico: "<<cons[j].diagnostico<<endl;
+				cout<<"\tSignos: "<<cons[j].signos<<endl;
+				cout<<"\tSintomas: "<<cons[j].sintomas<<endl;
+				cout<<"\tResultados: "<<cons[j].resultados<<endl;
+				
+			}
+		}
+		
+	}else
+	{
+		cout<<"\n\tEl paciente no esta registrado"<<endl;
 		pausar_pantalla();
 	}
+	
+	pausar_pantalla();
 }
 
 int obtener_edad(Paciente pac)
@@ -1089,16 +1063,12 @@ void menu_historial_opciones(void) {
 	system("cls");
 	titulo_principal();
 	cout << "\n\t\t\t\tMENU HISTORIAL MEDICO\n";
-	cout << "\n\t\t[1]. Crear archivo historial\n";
-	cout << "\t\t[2]. Agregar Historial\n";
-	cout << "\t\t[3]. Mostrar historial medico\n";
-	cout << "\t\t[4]. Volver al menu principal\n";
+	cout << "\n\t\t[1]. Mostrar historial medico\n";
+	cout << "\t\t[2]. Volver al menu principal\n";
 	cout << "\n\t\tIngrese una opcion: ";
 }
 void menu_historial() {
 	bool repetir = true;
-	FILE* archivo;
-	char historial[20]="historial.dat";
 	int opcion;
 
 	do {
@@ -1106,15 +1076,9 @@ void menu_historial() {
 		opcion = obtener_entero();
 		switch (opcion) {
 			case 1:
-				opcion_crear_archivo(archivo,historial);
-				break;					
-			case 2:
-				opcion_crear_historial();
-				break;
-			case 3:
 				opcion_mostrar_historial();
 				break;
-			case 4:
+			case 2:
 				repetir = false;
 				break;
 		}
@@ -1440,14 +1404,17 @@ void opcion_realizar_consulta(void){
 		cout << "\tIngrese los signos: ";
 		getline(cin,signos);
 		strcpy(cons.signos,signos.c_str());
+		fflush(stdin);
 		
 		cout << "\tIngrese los sintomas: ";
 		getline(cin,sintomas);
-		strcpy(cons.signos,sintomas.c_str());
+		strcpy(cons.sintomas,sintomas.c_str());
+		fflush(stdin);
 		
 		cout<< "\tIngrese los resultados: ";
         getline(cin,resultados);
         strcpy(cons.resultados,resultados.c_str());
+        fflush(stdin);
         
         cout<< "\tIngrese el diagnostico: ";
         getline(cin,diagnostico);
@@ -1468,10 +1435,12 @@ void opcion_realizar_consulta(void){
 		cout << "\n\tIngrese los medicamentos: ";
 		getline(cin,medicamentos);
 		strcpy(rec.medicamentos,medicamentos.c_str());
+		fflush(stdin);
 		
 		cout << "\tIngrese las instrucciones: ";
 		getline(cin,instrucciones);
 		strcpy(rec.instrucciones,instrucciones.c_str());
+		fflush(stdin);
 
         if (insertar_receta_archivo(rec)) {
 				cout << "\n\tLa receta fue registrada satisfactoriamente." << endl;
@@ -1508,35 +1477,35 @@ bool insertar_consulta_archivo(Consulta cons) {
 	}
 	return insercion;
 }
-/*
+
 Consulta *obtener_cons_archivo(int *n) {
 	FILE *archivo;
-	Paciente paciente;
-	Paciente *pacientes;
+	Consulta consulta;
+	Consulta *consultas;
 	int i;
 
-	archivo = fopen("paciente.dat", "rb");
+	archivo = fopen("consulta.dat", "rb");
 
 	if (archivo == NULL) {
 		*n = 0;
-		pacientes = NULL;
+		consultas = NULL;
 	} else {
 		fseek(archivo, 0, SEEK_END);
-		*n = ftell(archivo) / sizeof(Paciente);
-		pacientes = (Paciente *)malloc((*n) * sizeof(Paciente));
+		*n = ftell(archivo) / sizeof(Consulta);
+		consultas = (Consulta *)malloc((*n) * sizeof(Consulta));
 		fseek(archivo, 0, SEEK_SET);
-		fread(&paciente, sizeof(paciente), 1, archivo);
+		fread(&consulta, sizeof(consulta), 1, archivo);
 		i = 0;
 		while (!feof(archivo)) {
-			pacientes[i] = paciente;
-			fread(&paciente, sizeof(paciente), 1, archivo);
+			consultas[i] = consulta;
+			fread(&consulta, sizeof(consulta), 1, archivo);
 			i++;
 		}
 		fclose(archivo);
 	}
-	return pacientes;
+	return consultas;
 }
-*/
+
 
 void menu_receta() {
 	bool repetir = true;
@@ -1822,16 +1791,44 @@ char med[30]="Medicina General",ped[30]="Pediatria",gin[30]="Ginecologia";
 				}	
 			}		
 		}
+		
+		if(m>0){
 			promedioMed = sumaEdad_med/m;
+		}
+		if(p>0){
 			promedioPed = sumaEdad_ped/p;
+		}
+		if(g>0){
 			promedioGin = sumaEdad_gin/g;
+		}
+	
+		if(m!=0){
 			cout<<"\n\tLa edad promedio registrada de Medicina General es: "<<promedioMed<<endl;
+		}
+		else{
+			cout<<"\n\tLa especialidad no fue solicitada.";
+			cout<<endl;
+		}
+		
+		if(p!=0){
 			cout<<"\n\tLa edad promedio registrada de Pediatria es: "<<promedioPed<<endl;
+		}
+		else{
+			cout<<"\n\tLa especialidad Pedatria no fue solicitada.";
+			cout<<endl;
+		}
+		
+		if(g!=0){
 			cout<<"\n\tLa edad promedio registrada de Ginecologia es: "<<promedioGin<<endl;
-			cout<<endl; 
+		}
+		else{
+			cout<<"\n\tLa especialidad Ginecologia no fue solicitada.";
+			cout<<endl;
+		}
+		cout<<endl; 
 	}	
 	pausar_pantalla();
-} 
+}  
 
 void titulo_principal(void) {
 	cout << "\n     ======================================================================\n";
