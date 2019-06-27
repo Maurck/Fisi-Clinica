@@ -145,6 +145,14 @@ void opcion_mostrar_cita();
 Cita *obtener_array_cita(int *n);
 
 
+void menu_reportes();
+void menu_reportes_opciones();
+
+void opcion_especialidad_masolicitada();
+void opcion_promedio_edad();
+void opcion_promedio_edad_x_especialidad();
+
+
 int obtener_entero();
 int obtener_entero(int inf, int sup);
 bool es_entero_valido(string str);
@@ -172,7 +180,7 @@ void menu_principal() {
 
 	do {
 		menu_principal_opciones();
-		opcion = obtener_entero(1,7);
+		opcion = obtener_entero(1,8);
 
 		switch (opcion) {
 			case 1:
@@ -194,6 +202,9 @@ void menu_principal() {
 				menu_receta();
 				break;
 			case 7:
+				menu_reportes();
+				break;
+			case 8:
 				se_repite = false;
 				break;
 		}
@@ -210,7 +221,8 @@ void menu_principal_opciones(void) {
 	cout << "\t\t[4]. Consulta\n";
 	cout << "\t\t[5]. Historial Medico\n";
 	cout << "\t\t[6]. Recetas\n";
-	cout << "\t\t[7]. Salir\n";
+	cout << "\t\t[7]. Reportes\n";
+	cout << "\t\t[8]. Salir\n";
 	cout << "\n\t\tIngrese una opcion: ";
 }
 
@@ -280,7 +292,7 @@ void opcion_agregar_cita(){
 	Hora hCita;
 	string respuesta;
 	bool ninio = true,mujer = true,se_repite = true;
-	char med[25] = "Medicina General",ped[25] = "Pediatria",gin[25] = "Ginecologia";
+	char med[30] = "Medicina General", ped[30] = "Pediatria", gin[30] = "Ginecologia";
 	
 	
 	do {
@@ -725,6 +737,7 @@ void menu_medico() {
 	menu_medico_opciones();
 	
 }
+
 void menu_medico_opciones(){
 	
 	system("cls");
@@ -737,6 +750,7 @@ void menu_medico_opciones(){
 	cout << "\n\t\tIngrese una opcion: ";
 	
 }
+
 void opcion_crear_medico(){
 	bool se_repite=true;
 	Medico user;
@@ -767,8 +781,8 @@ void opcion_crear_medico(){
 		strcpy(user.centroDeEstudio,centro.c_str());
 		cout << "\t\t\t\tIngresa la especialidad del Medico: \n";
 		cout << "\n\t\tMedicina General.....[1]\n";
-		cout << "\t\tGinecologia............[2]\n";
-		cout << "\t\tPedriatria.........[3]\n";
+		cout << "\t\tPediatria............[2]\n";
+		cout << "\t\tGinecologia.........[3]\n";
 		cout<<"\n\t\tDigite opcion: ";
 		tipo=obtener_entero(1,3);
 		switch(tipo){
@@ -777,11 +791,11 @@ void opcion_crear_medico(){
 				strcpy(user.especialidad,tipoEspecialidad.c_str());
 				break;
 			case 2:
-				tipoEspecialidad="Ginecologia";
+				tipoEspecialidad="Pediatria";
 				strcpy(user.especialidad,tipoEspecialidad.c_str());
 				break;
 			case 3:
-				tipoEspecialidad="Pedriatria";
+				tipoEspecialidad="Ginecologia";
 				strcpy(user.especialidad,tipoEspecialidad.c_str());
 				break;
 		}
@@ -1211,13 +1225,13 @@ void opcion_crear_paciente(void){
 		}
         cout<< "\tFecha de Nacimiento: ";
        	cout<<"\n\tDia: ";
-       	cin>>fNac.dia;
+    	fNac.dia=obtener_entero(1,31);
        	pac.Fecha_Nac.dia = fNac.dia;
        	cout<<"\tMes: ";
-       	cin>>fNac.mes;
+       	fNac.mes = obtener_entero(1,12);
 		pac.Fecha_Nac.mes = fNac.mes;
        	cout<<"\tAnio: ";
-       	cin>>fNac.anio;
+       	fNac.anio = obtener_entero(1900,2100);
 		pac.Fecha_Nac.anio = fNac.anio;
 		fflush(stdin);
 		
@@ -1631,6 +1645,194 @@ void opcion_mostrar_receta() {
 	}
 }
 
+void menu_reportes() { 
+	void menu_principal_opciones();
+	bool se_repite = true;
+	int opcion;
+
+	do {
+		menu_reportes_opciones();
+		opcion = obtener_entero();
+
+		switch (opcion) {
+			case 1:
+				opcion_especialidad_masolicitada();
+				break;
+			case 2:
+				opcion_promedio_edad();
+				break;
+			case 3:
+				opcion_promedio_edad_x_especialidad();
+				break;
+			case 4:
+				se_repite = false;
+				break;
+		}
+	} while (se_repite);
+}
+
+void menu_reportes_opciones(void) {
+	system("cls");
+	titulo_principal();
+	cout << "\n\t\t\t\tMENU SERVICIOS\n";
+	cout << "\n\t\t[1]. Especialidad mas solicitada\n";
+	cout << "\t\t[2]. Edad promedio\n";
+	cout << "\t\t[3]. Edad promedio por especialidad\n";
+	cout << "\t\t[4]. Salir\n";
+	cout << "\n\t\tIngrese una opcion: ";
+}
+
+void opcion_especialidad_masolicitada(){
+Cita *citas;
+int nro_citas;
+
+int c1=0, c2=0, c3=0;
+int contador=1;
+
+char n1[30]="Medicina General", n2[30]="Pediatria", n3[30]="Ginecologia";
+
+
+	system("cls");
+	titulo_principal();		
+	cout << "\n\t\tESPECIALIDAD MAS SOLICITADA\n";
+	citas = obtener_array_cita(&nro_citas);
+	
+	if (nro_citas == 0) {
+		cout << "\n\t\tNo hay reporte de este modulo" << endl;
+		pausar_pantalla();
+	}
+	else{
+		for(int i=0; i<nro_citas; i++){
+			if(strcmp(citas[i].Especialidad,n1)==0){
+				c1=c1+contador;
+			}
+		}
+		for(int i=0; i<nro_citas; i++){
+			if(strcmp(citas[i].Especialidad,n2)==0){
+				c2=c2+contador;
+			}
+		}
+		for(int i=0; i<nro_citas; i++){
+			if(strcmp(citas[i].Especialidad,n3)==0){
+				c3=c3+contador;
+			}
+		}
+		
+		if((c1==c2)&&(c1==c3)&&(c2==c3)){
+  			cout<<"\n\tTodas las especialidades son solicitadas por igual. ";
+  			cout<<endl;
+ 		}
+ 		else if((c1==c2)&&(c1>c3)&&(c2>c3)){
+ 			cout<<"\n\tLas especialidades mas solicitadas son: "<<n1<<" y "<<n2;
+ 			cout<<endl;
+		}
+		else if((c1==c3)&&(c1>c2)&&(c3>c2)){
+ 			cout<<"\n\tLas especialidades mas solicitadas son: "<<n1<<" y "<<n3;
+ 			cout<<endl;
+		}
+		else if((c2==c3)&&(c2>c1)&&(c3>c1)){
+ 			cout<<"\n\tLas especialidades mas solicitadas son: "<<n2<<" y "<<n3;
+ 			cout<<endl;
+		}
+ 		else if((c1>c2)&&(c1>c3)){
+  			cout<<"\n\tLa especialidad mas solicitada es: "<<n1;
+  			cout<<endl;
+ 		}
+ 		else if((c2>c1)&&(c2>c3)){
+  			cout<<"\n\tLa especialidad mas solicitada es: "<<n2;
+  			cout<<endl;
+ 		}
+ 		else{
+  			cout<<"\n\tLa especialidad mas solicitada es: "<<n3;
+  			cout<<endl;
+ 		}	 					
+	pausar_pantalla();	
+	}
+}
+
+void opcion_promedio_edad(){
+Paciente *paciente;
+int num_pac;
+int sumaEdad=0;
+float promedio;
+
+	system("cls");
+	titulo_principal();
+	cout << "\n\t\tEDAD PROMEDIO\n";
+	paciente = obtener_pac_archivo(&num_pac);
+	
+	if (num_pac == 0) {
+		cout << "\n\t\tNo hay reporte de este modulo" << endl;
+		pausar_pantalla();
+	} 
+	else{
+		for (int i = 0; i < num_pac; i++) {
+				sumaEdad=sumaEdad+obtener_edad(paciente[i]);
+			}
+			promedio=(sumaEdad)/num_pac;
+			cout<<"\n\tLa edad promedio registrado de todos los pacientes es: "<<promedio;
+			cout<<endl; 
+		}	
+	pausar_pantalla();
+}
+
+void opcion_promedio_edad_x_especialidad(){
+Paciente *paciente;
+Cita *cita;
+int num_cit, num_pac;
+float sumaEdad_med=0, sumaEdad_ped=0, sumaEdad_gin=0, m=0, p=0, g=0;
+float promedioMed,promedioPed,promedioGin;
+char med[30]="Medicina General",ped[30]="Pediatria",gin[30]="Ginecologia";
+
+	system("cls");
+	titulo_principal();
+	cout << "\n\t\tEDAD PROMEDIO\n";
+	cita = obtener_array_cita(&num_cit);
+	paciente = obtener_pac_archivo(&num_pac);
+	
+	if (num_pac == 0) {
+		cout << "\n\t\tNo hay reporte de este modulo" << endl;
+		pausar_pantalla();
+	} 
+	else{
+		for (int i = 0; i < num_cit; i++){
+			
+			if(strcmp(cita[i].Especialidad,med)==0){
+				for(int j=0; j<num_pac; j++){
+					if(cita[i].DNI==paciente[j].DNI){					
+						sumaEdad_med=sumaEdad_med+obtener_edad(paciente[j]);
+						m++;
+					}
+				}	
+			}
+			if(strcmp(cita[i].Especialidad,ped)==0){
+				for(int j=0;j< num_pac;j++){
+					if(cita[i].DNI==paciente[j].DNI){					
+						sumaEdad_ped=sumaEdad_ped+obtener_edad(paciente[j]);
+						p++;
+					}
+				}	
+			}
+			if(strcmp(cita[i].Especialidad,gin)==0){
+				for(int j=0;j< num_pac;j++){
+					if(cita[i].DNI==paciente[j].DNI){					
+						sumaEdad_gin=sumaEdad_gin+obtener_edad(paciente[j]);
+						g++;
+					}
+				}	
+			}		
+		}
+			promedioMed = sumaEdad_med/m;
+			promedioPed = sumaEdad_ped/p;
+			promedioGin = sumaEdad_gin/g;
+			cout<<"\n\tLa edad promedio registrada de Medicina General es: "<<promedioMed<<endl;
+			cout<<"\n\tLa edad promedio registrada de Pediatria es: "<<promedioPed<<endl;
+			cout<<"\n\tLa edad promedio registrada de Ginecologia es: "<<promedioGin<<endl;
+			cout<<endl; 
+	}	
+	pausar_pantalla();
+} 
+
 void titulo_principal(void) {
 	cout << "\n     ======================================================================\n";
 	cout << "\t\t\t\t CLINICA FISI\n";
@@ -1654,6 +1856,7 @@ int obtener_entero() {
 	}
 	return atoi(valor.c_str());
 }
+
 int obtener_entero(int inf, int sup) {
 	bool no_aceptado = true;
 	int numero;
@@ -1671,6 +1874,7 @@ int obtener_entero(int inf, int sup) {
 	}
 	return numero;
 }
+
 bool es_entero_valido(string str) {
 	int i=0;
 	bool valido = true;
@@ -1687,6 +1891,7 @@ bool es_entero_valido(string str) {
 
 	return valido;
 }
+
 double obtener_flotante(void) {
 	bool no_es_flotante = true;
 	string valor;
@@ -1705,6 +1910,7 @@ double obtener_flotante(void) {
 	}
 	return atof(valor.c_str());
 }
+
 bool es_flotante_valido(string str) {
 	int inicio = 0;
 	int i, n_puntos = 0;
@@ -1748,6 +1954,7 @@ bool es_flotante_valido(string str) {
 
 	return valido;
 }
+
 void pausar_pantalla() {
 	char caracter;
 	cout << "\n\tPresiona 'Enter' para continuar...";
