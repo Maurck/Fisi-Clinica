@@ -832,18 +832,18 @@ void opcion_mostrar_medico(){
 	} else {
 
 		cout << "\n\t\t\t\tMEDICOS REGISTRADOS\n";
-    cout << "\t" << setw(35) << setiosflags(ios::left) << "Nombre"
+    cout << "  " << setw(35) << setiosflags(ios::left) << "Nombre"
          << setw(18) << setiosflags(ios::left) << "Especialidad ";
     cout << setw(10) << setiosflags(ios::left) << "DNI ";
     cout << setw(12) << setiosflags(ios::left) << "Telefono";
-    cout << setw(40) << setiosflags(ios::left) << "Centro de estudios " << endl;
+    cout << setw(20) << setiosflags(ios::left) << "Centro de estudios " << endl;
 		for (int i = 0; i < nro_medicos; i++) {
 			nombre_completo = string(medicos[i].nombre) + " " + string(medicos[i].apellidoP) + " " + string(medicos[i].apellidoM);
-			cout << "\t" << setw(35) << setiosflags(ios::left) << nombre_completo;
+			cout << "  " << setw(35) << setiosflags(ios::left) << nombre_completo;
 			cout << setw(18) << setiosflags(ios::left) << medicos[i].especialidad;
 			cout << setw(10) << setiosflags(ios::left) << medicos[i].DNI;
 			cout << setw(12) << setiosflags(ios::left) << medicos[i].telefono;
-			cout << setw(40) << setiosflags(ios::left) << medicos[i].centroDeEstudio << endl;
+			cout << setw(20) << setiosflags(ios::left) << medicos[i].centroDeEstudio << endl;
 		}
 		pausar_pantalla();
 	}
