@@ -152,11 +152,12 @@ int obtener_entero(int inf, int sup);
 bool es_entero_valido(string str);
 double obtener_flotante();
 bool es_flotante_valido(string str);
+
 bool fecha_rango_valido(Fecha fCita);
 bool hora_rango_valido(Hora hCita);
 bool fecha_valida(Fecha fCita,Hora hCita);
 
-
+void limpiar_pantalla();
 void pausar_pantalla();
 void titulo_principal(void);
 
@@ -206,7 +207,7 @@ void menu_principal() {
 }
 
 void menu_principal_opciones(void) {
-	system("clear");
+  limpiar_pantalla();
 	titulo_principal();
 	cout << "\n\t\t\t\tMENU PRINCIPAL\n";
 	cout << "\n\t\t[1]. Medicos\n";
@@ -248,7 +249,7 @@ void menu_cita() {
 }
 
 void menu_cita_opciones() {
-	system("clear");
+  limpiar_pantalla();
 	titulo_principal();
 	cout << "\n\t\t\t\tMENU CITAS\n";
 	cout << "\n\t\t[1]. Crear archivo citas\n";
@@ -263,14 +264,14 @@ void opcion_crear_archivo(FILE *archivoCita,char nombreArchivo[20]) {
 	
 	if(archivoCita == NULL)
 	{
-		system("clear");
+		limpiar_pantalla();
 		titulo_principal();
 		cout<<"\n\tEl archivo no se pudo crear."<<endl;
 		pausar_pantalla();
 	}
 	else
 	{
-		system("clear");
+		limpiar_pantalla();
 		titulo_principal();
 		cout<<"\n\tEl archivo se creo correctamente. "<<endl;
 		pausar_pantalla();
@@ -289,7 +290,7 @@ void opcion_agregar_cita() {
 	
 	
 	do {
-		system("clear");
+		limpiar_pantalla();
 		titulo_principal();
 		cout << "\n\t\tCREAR NUEVA CITA\n";
 		
@@ -314,7 +315,7 @@ void opcion_agregar_cita() {
 			
 			do {
 				ninio = true,mujer = true;
-				system("clear");
+				limpiar_pantalla();
 				titulo_principal();
 				cout << "\n\t\tCREAR NUEVA CITA\n";
 				cout << "\tIngresa el Codigo de la cita: "<<codigoCit<<endl;
@@ -346,8 +347,7 @@ void opcion_agregar_cita() {
 				{
 					cout<<"\n\tEspecialidad no disponible"<<endl;
 					cout<<"\n\t";
-					system("pause");
-			
+					pausar_pantalla();
 				}else
 				{
 											
@@ -357,7 +357,7 @@ void opcion_agregar_cita() {
 					{
 						cout<<"\n\tSolo los niños pueden acceder a Pediatria. "<<endl;
 						cout<<"\n\t";
-						system("pause");
+						pausar_pantalla();
 						ninio = false;	
 					}	
 				}else if(opcionTipoEsp == 3)
@@ -366,7 +366,7 @@ void opcion_agregar_cita() {
 					{
 						cout<<"\n\tSolo las mujeres pueden acceder a Ginecologia. "<<endl;
 						cout<<"\n\t";
-						system("pause");
+						pausar_pantalla();
 						mujer = false;
 					}	
 				} 
@@ -386,7 +386,7 @@ void opcion_agregar_cita() {
 				fCita.anio = obtener_entero();
 			
 				do{
-					system("clear");
+					limpiar_pantalla();
 					titulo_principal();
 					cout << "\n\t\tCREAR NUEVA CITA\n";
 					cout << "\tIngresa el Codigo de la cita: "<<codigoCit<<endl;
@@ -422,7 +422,7 @@ void opcion_agregar_cita() {
 					{	
 						cout<<"\n\tEl doctor no esta disponible a esa hora, digite otra ";
 						cout<<"\n\t";
-						system("pause");
+						pausar_pantalla();
 					}
 			
 				}while(!doctor_libre(cit.Especialidad,fCita,hCita));
@@ -670,7 +670,7 @@ void opcion_mostrar_cita() {
 	Cita *citas;
 	int nro_citas;
 
-	system("clear");
+	limpiar_pantalla();
 	titulo_principal();
 	citas = obtener_array_cita(&nro_citas);
 
@@ -727,7 +727,7 @@ void menu_medico() {
 
 void menu_medico_opciones(){
 	
-	system("clear");
+	limpiar_pantalla();
 	titulo_principal();
 	cout << "\n\t\t\t\tMENU MEDICOS\n";
 	cout << "\n\t\t[1]. Crear archivo medico";
@@ -744,7 +744,7 @@ void opcion_crear_medico(){
 	int tipo,DNI,Telefono,Sueldo;
 	string nombre,aPaterno,aMaterno,correo,centro,tipoEspecialidad,contra,opc;
 
-	system("clear");
+	limpiar_pantalla();
 	titulo_principal();
 	cout << "\n\t\tingresar NUEVO MEDICO\n";
 	cout << "\n\tIngresa el DNI del medico: ";
@@ -835,7 +835,7 @@ void opcion_mostrar_medico(){
 	Medico *medicos;
 	int nro_medicos;
 
-	system("clear");
+	limpiar_pantalla();
 	titulo_principal();
 	medicos = obtener_stu_archivo(&nro_medicos);
 
@@ -924,7 +924,7 @@ void opcion_mostrar_historial() {
 	cit = obtener_array_cita(&num_cit);
 	cons = obtener_cons_archivo(&num_cons);
 	
-	system("clear");
+	limpiar_pantalla();
 	titulo_principal();
 	
 	cout<<"\n\tDigite el numero de DNI del paciente: ";
@@ -1045,7 +1045,7 @@ Historial *obtener_his_archivo(int *n) {
 
 void menu_historial_opciones(void) {
 
-	system("cls");
+  limpiar_pantalla();
 	titulo_principal();
 	cout << "\n\t\t\t\tMENU HISTORIAL MEDICO\n";
 	cout << "\n\t\t[1]. Mostrar historial medico\n";
@@ -1100,7 +1100,7 @@ void menu_paciente() {
 
 void menu_paciente_opciones(void) {
 	
-	system("cls");
+  limpiar_pantalla();
 	titulo_principal();
 	cout << "\n\t\t\t\tMENU PACIENTES\n";
 	cout << "\n\t\t[1]. Crear archivo paciente\n";
@@ -1121,7 +1121,7 @@ void opcion_crear_paciente(void){
 	string respuesta;
 	Fecha fNac;
 	do {
-		system("clear");
+		limpiar_pantalla();
 		titulo_principal();
 		cout << "\n\t\tAGREGAR PACIENTE\n";
 		cout<< "\tIngrese el DNI del paciente: ";
@@ -1282,7 +1282,7 @@ void opcion_mostrar_paciente() {
 	Paciente *pacientes;
 	int num_pac;
 
-	system("clear");
+	limpiar_pantalla();
 	titulo_principal();
 	pacientes = obtener_pac_archivo(&num_pac);
 
@@ -1371,7 +1371,7 @@ void menu_consulta() {
 
 void menu_consulta_opciones(void) {
 
-	system("cls");
+	limpiar_pantalla();
 	titulo_principal();
 	cout << "\n\t\t\t\tMENU CONSULTA\n";
 	cout << "\n\t\t[1]. Crear archivo consulta\n";
@@ -1390,7 +1390,7 @@ void opcion_realizar_consulta(void){
 	Receta rec;
 	
 	do {
-		system("clear");
+		limpiar_pantalla();
 		titulo_principal();
 		cout << "\n\t\tREALIZAR CONSULTA\n";
 		cout<< "\tIngrese el codigo de la cita: ";
@@ -1535,7 +1535,7 @@ void menu_receta() {
 }
 
 void menu_receta_opciones(void) {
-	system("clear");
+  limpiar_pantalla();
 	titulo_principal();
 	cout << "\n\t\t\t\tMENU RECETA\n";
 	cout << "\n\t\t[1]. Crear archivo receta\n";
@@ -1594,7 +1594,7 @@ void opcion_mostrar_receta() {
 	Receta *recetas;
 	int num_rec;
 
-	system("clear");
+  limpiar_pantalla();
 	titulo_principal();
 	recetas = obtener_rec_archivo(&num_rec);
 
@@ -1647,7 +1647,7 @@ void menu_reportes() {
 }
 
 void menu_reportes_opciones(void) {
-	system("clear");
+  limpiar_pantalla();
 	titulo_principal();
 	cout << "\n\t\t\t\tMENU SERVICIOS\n";
 	cout << "\n\t\t[1]. Especialidad mas solicitada\n";
@@ -1666,7 +1666,7 @@ int c1=0, c2=0, c3=0;
 char n1[30]="Medicina General", n2[30]="Pediatria", n3[30]="Ginecologia";
 
 
-	system("clear");
+  limpiar_pantalla();
 	titulo_principal();		
 	cout << "\n\t\tESPECIALIDAD MAS SOLICITADA\n";
 	
@@ -1754,7 +1754,7 @@ int num_pac;
 int sumaEdad=0;
 float promedio;
 
-	system("clear");
+  limpiar_pantalla();
 	titulo_principal();
 	cout << "\n\t\tEDAD PROMEDIO\n";
 	paciente = obtener_pac_archivo(&num_pac);
@@ -1782,7 +1782,7 @@ float sumaEdad_med=0, sumaEdad_ped=0, sumaEdad_gin=0, m=0, p=0, g=0;
 float promedioMed,promedioPed,promedioGin;
 char med[30]="Medicina General",ped[30]="Pediatria",gin[30]="Ginecologia";
 
-	system("clear");
+  limpiar_pantalla();
 	titulo_principal();
 	cout << "\n\t\tEDAD PROMEDIO\n";
 	cita = obtener_array_cita(&num_cit);
@@ -1989,3 +1989,6 @@ void pausar_pantalla() {
 	}
 }
 
+void limpiar_pantalla(void) {
+  system("clear");
+}
