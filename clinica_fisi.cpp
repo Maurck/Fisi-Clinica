@@ -17,7 +17,7 @@ struct Hora{
 	int minutos;
 };
 
-struct Paciente{	
+struct Paciente{
 	char Apellido_Paterno[15];
 	char Apellido_Materno[15];
 	char Nombres[25];
@@ -68,7 +68,7 @@ struct Consulta{
 struct Receta{
 	int codigoCit;
 	char medicamentos[200];
-	char instrucciones[200];	
+	char instrucciones[200];
 };
 
 void menu_principal();
@@ -78,7 +78,7 @@ void menu_medico_opciones();
 
 void opcion_crear_medico();
 bool insertar_medico_archivo(Medico user);
-bool existe_medico(int codigo,Medico *user);
+void existe_medico(bool &existe, int codigo,Medico *user);
 
 void opcion_mostrar_medico();
 Medico *obtener_stu_archivo(int *n);
@@ -90,7 +90,7 @@ void menu_paciente_opciones(void);
 
 void opcion_crear_paciente();
 bool insertar_paciente_archivo(Paciente pac);
-bool existe_paciente(int DNI,Paciente *pac);
+void existe_paciente(bool &existe, int DNI,Paciente *pac);
 
 void opcion_mostrar_paciente();
 Paciente *obtener_pac_archivo(int *n);
@@ -101,7 +101,6 @@ void menu_consulta_opciones(void);
 
 void opcion_realizar_consulta();
 bool insertar_consulta_archivo(Consulta cons);
-bool existe_consulta(int DNI,Paciente *pac);
 
 void opcion_mostrar_consulta();
 Consulta *obtener_cons_archivo(int *n);
@@ -128,13 +127,13 @@ int obtener_edad(Paciente pac);
 void menu_cita();
 void menu_cita_opciones();
 
-void opcion_crear_archivo(FILE *archivoCita,char nombreArchivo[20]);
+void opcion_crear_archivo(FILE *archivoCita, char nombreArchivo[20]);
 
 void opcion_agregar_cita();
 bool insertar_cita_archivo(Cita cit);
-bool existe_cita(int codigoCit, Cita *cit);
+void existe_cita(bool &existe, int codigoCit, Cita *cit);
 bool doctor_libre(char Especialidad[25],Fecha fCita, Hora hCita);
-bool existe_historial(int DNI,Historial *hist);
+void existe_historial(bool existe, int DNI,Historial *hist); // posible eliminacion
 bool existe_especialidad(char Especialidad[25]);
 
 void opcion_mostrar_cita();
@@ -234,7 +233,7 @@ void menu_cita() {
 
 		switch (opcion) {
 			case 1:
-				opcion_crear_archivo(aCita,nombreArchivo);
+				opcion_crear_archivo(aCita, nombreArchivo);
 				break;
 			case 2:
 				opcion_agregar_cita();
@@ -260,8 +259,7 @@ void menu_cita_opciones() {
 	cout << "\n\t\tIngrese una opcion: ";
 }
 
-void opcion_crear_archivo(FILE *archivoCita,char nombreArchivo[20])
-{
+void opcion_crear_archivo(FILE *archivoCita,char nombreArchivo[20]) {
 	archivoCita = fopen(nombreArchivo,"wb");
 	
 	if(archivoCita == NULL)
@@ -280,14 +278,14 @@ void opcion_crear_archivo(FILE *archivoCita,char nombreArchivo[20])
 	}
 }
 
-void opcion_agregar_cita(){
+void opcion_agregar_cita() {
 	Cita cit;
 	Paciente pac;
 	int DNI,tipoSer,codigoCit,opcionTipoEsp,edad;
 	Fecha fCita;
 	Hora hCita;
 	string respuesta;
-	bool ninio = true,mujer = true,se_repite = true;
+	bool ninio = true,mujer = true,se_repite = true, existe;
 	char med[30] = "Medicina General", ped[30] = "Pediatria", gin[30] = "Ginecologia";
 	
 	
@@ -298,16 +296,18 @@ void opcion_agregar_cita(){
 		
 		cout << "\tIngresa el Codigo de la cita: ";
 		codigoCit = obtener_entero();
+    existe_cita(existe, codigoCit, &cit);
 		
-		if(existe_cita(codigoCit,&cit))
+		if(existe)
 		{
 			cout<<"\n\tEsta cita ya existe"<<endl;
 		}else{
 			
 			cout << "\tIngresa el DNI del usuario: ";
 			DNI = obtener_entero();
+      existe_paciente(existe, DNI, &pac);
 		
-			if (existe_paciente(DNI,&pac)) 
+			if (existe) 
 			{
 		
 			cit.codigoCit = codigoCit;
@@ -445,15 +445,9 @@ void opcion_agregar_cita(){
 				}
 		}
 		
-		cout << "\n\tDesea continuar? [S/n]: ";
-		getline(cin, respuesta);
+		se_repite = false;
 		
-		if (!(respuesta.compare("s") == 0 || respuesta.compare("S") == 0))
-			se_repite = false;
-		else
-			menu_principal();
-		
-	} while (se_repite);	
+	} while (se_repite);
 }
 
 bool insertar_cita_archivo(Cita cit) {
@@ -595,9 +589,9 @@ bool hora_rango_valido(Hora hCita)
 	return rango_valido;
 }
 
-bool existe_cita(int codigoCit, Cita *cit) {
+void existe_cita(bool &existe, int codigoCit, Cita *cit) {
 	FILE *archivo;
-	bool existe = false;
+	
 
 	archivo = fopen("citas.dat", "rb");
 
@@ -612,12 +606,10 @@ bool existe_cita(int codigoCit, Cita *cit) {
 		}
 		fclose(archivo);
 	}
-	return existe;
 }
 
-bool existe_historial(int codigo_historial, Historial *hist) {
+void existe_historial(bool &existe, int codigo_historial, Historial *hist) {
 	FILE *archivo;
-	bool existe = false;
 
 	archivo = fopen("historial.dat", "rb");
 
@@ -632,7 +624,7 @@ bool existe_historial(int codigo_historial, Historial *hist) {
 		}
 		fclose(archivo);
 	}
-	return existe;
+	
 }
 
 bool doctor_libre(char Especialidad[30],Fecha fCita,Hora hCita)
@@ -716,7 +708,7 @@ void menu_medico() {
 		switch(opcion){
 			case 1:
 				opcion_crear_archivo(archivo,med);
-				break;		
+				break;
 			case 2:
 				opcion_crear_medico();
 				break;
@@ -748,17 +740,18 @@ void menu_medico_opciones(){
 }
 
 void opcion_crear_medico(){
-	bool se_repite=true;
+	bool se_repite=true, existe;
 	Medico user;
 	int tipo,DNI,Telefono,Sueldo;
 	string nombre,aPaterno,aMaterno,correo,centro,tipoEspecialidad,contra,opc;
-	do{
-		system("clear");
-		titulo_principal();
-		cout << "\n\t\tingresar NUEVO MEDICO\n";
-		cout << "\n\tIngresa el DNI del medico: ";
-		DNI=obtener_entero();
-		if(!existe_medico(DNI,&user)){
+
+	system("clear");
+	titulo_principal();
+	cout << "\n\t\tingresar NUEVO MEDICO\n";
+	cout << "\n\tIngresa el DNI del medico: ";
+	DNI=obtener_entero();
+	existe_medico(existe, DNI, &user);
+	if(!existe) {
 		user.DNI=DNI;
 		cout << "\tIngresa el Nombre del medico: ";
 		getline(cin,nombre);
@@ -796,31 +789,19 @@ void opcion_crear_medico(){
 				break;
 		}
 	
-		if(insertar_medico_archivo(user)){
+		if(insertar_medico_archivo(user)) {
 			cout << "\n\t\t\t\t\tEl Medico fue creado con exito";
-		}else{
+		} else {
 			cout << "\n\tOcurrio un error al intentar crear el Medico" << endl;
 			cout << "\tIntentelo nuevamente" << endl;
 		}
-	}else{
+	} else {
 		cout << "\n\tEl Medico con DNI " << DNI << " ya existe.\n";
 		cout << "\t  No puede ingresar dos Medicos con el mismo DNI" << endl;
+		pausar_pantalla();
 	}
-		cout <<" ";
-		cout << "\n\t\t\t\tDesea continuar? [S/n]: ";
-		fflush(stdin);
-		getline(cin,opc);
-		if(!(opc.compare("S")==0 || opc.compare("s")==0)){
-			se_repite=false;
-		}
-
-	menu_medico();
-	
-	}while(se_repite);
-	
-	menu_principal();
-	
 }
+
 bool insertar_medico_archivo(Medico user){
 	FILE *datosMedico;
 	bool agregado;
@@ -834,9 +815,8 @@ bool insertar_medico_archivo(Medico user){
 	}
 	return agregado;
 }
-bool existe_medico(int DNI,Medico *user){
+void existe_medico(bool &existe, int DNI,Medico *user){
 	FILE* datosMedico;
-	bool existe=false;
 	
 	datosMedico=fopen("datosDeMedico.dat","rb");
 	if(!(datosMedico==NULL)){
@@ -850,7 +830,6 @@ bool existe_medico(int DNI,Medico *user){
 		}
 		fclose(datosMedico);
 	}
-	return existe;
 }
 void opcion_mostrar_medico(){
 	Medico *medicos;
@@ -933,7 +912,7 @@ bool modificar_archivo_medico(Medico user) {
 }
 
 void opcion_mostrar_historial() {
-
+	bool existe;
 	Paciente pac;
 	Cita *cit;
 	Consulta *cons;
@@ -948,8 +927,9 @@ void opcion_mostrar_historial() {
 	
 	cout<<"\n\tDigite el numero de DNI del paciente: ";
 	dni = obtener_entero();
+	existe_paciente(existe, dni, &pac);
 	
-	if(existe_paciente(dni,&pac))
+	if(existe)
 	{
 		cout<<"\n\tNombres: "<<pac.Nombres<<endl;
 		cout<<"\tApellido Paterno: "<<pac.Apellido_Paterno<<endl;
@@ -1097,7 +1077,7 @@ void menu_paciente() {
 		switch (opcion) {
 			case 1:
 				opcion_crear_archivo(archivo,paciente);
-				break;					
+				break;
 			case 2:
 				opcion_crear_paciente();
 				break;
@@ -1124,6 +1104,7 @@ void menu_paciente_opciones(void) {
 
 void opcion_crear_paciente(void){
 	Paciente pac;
+	bool existe;
 	string rspta,apelli1,apelli2,nombres,nacim,cita,problem;
 	string hosp,aler,medi,estad1,segur1,gmail;
 	bool repetir=true;
@@ -1136,7 +1117,8 @@ void opcion_crear_paciente(void){
 		cout << "\n\t\tAGREGAR PACIENTE\n";
 		cout<< "\tIngrese el DNI del paciente: ";
 		dniPac=obtener_entero();
-		if (existe_paciente(dniPac, &pac)) {
+		existe_paciente(existe, dniPac, &pac);
+		if (existe) {
 			cout <<"\n\tEste paciente ya existe."<<endl;
 		}else{
 		pac.DNI = dniPac;	
@@ -1244,9 +1226,9 @@ void opcion_crear_paciente(void){
 	menu_principal();
 }
 
-bool existe_paciente(int DNI, Paciente *pac) {
+void existe_paciente(bool &existe, int DNI, Paciente *pac) {
 	FILE *archivo;
-	bool existe = false;
+	
 
 	archivo = fopen("paciente.dat", "rb");
 
@@ -1261,7 +1243,6 @@ bool existe_paciente(int DNI, Paciente *pac) {
 		}
 		fclose(archivo);
 	}
-	return existe;
 }
 
 bool insertar_paciente_archivo(Paciente pac) {
@@ -1382,7 +1363,7 @@ void menu_consulta_opciones(void) {
 void opcion_realizar_consulta(void){
 	
 	int codigoCit;
-	bool repetir;
+	bool repetir, existe;
 	string signos,sintomas,resultados,diagnostico,medicamentos,instrucciones,respuesta;
 	Cita cit;
 	Consulta cons;
@@ -1394,8 +1375,9 @@ void opcion_realizar_consulta(void){
 		cout << "\n\t\tREALIZAR CONSULTA\n";
 		cout<< "\tIngrese el codigo de la cita: ";
 		codigoCit=obtener_entero();
+		existe_cita(existe, codigoCit, &cit);
 		
-		if (!existe_cita(codigoCit, &cit)) {
+		if (!existe) {
 			cout <<"\n\tNo ha sacado cita aun."<<endl;
 		}else{
 			
@@ -1518,7 +1500,7 @@ void menu_receta() {
 		opcion = obtener_entero(1,3);
 		switch (opcion) {					
 			case 1:
-				opcion_crear_archivo(archivo,receta);
+				opcion_crear_archivo(archivo, receta);
 				break;
 			case 2:
 				opcion_mostrar_receta();
