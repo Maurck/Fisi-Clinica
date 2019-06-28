@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <string.h>
+#include <iomanip>
 
 using namespace std;
 
@@ -43,7 +44,7 @@ struct Medico {
 	char apellidoM[25];
 	int telefono;
 	char correoElectronico[25];
-	char centroDeEstudio[30];
+	char centroDeEstudio[49];
 	char especialidad[25];
 };
 
@@ -834,6 +835,7 @@ void existe_medico(bool &existe, int DNI,Medico *user){
 void opcion_mostrar_medico(){
 	Medico *medicos;
 	int nro_medicos;
+  string nombre_completo;
 
 	system("clear");
 	titulo_principal();
@@ -845,19 +847,21 @@ void opcion_mostrar_medico(){
 	} else {
 
 		cout << "\n\t\t\t\tMEDICOS REGISTRADOS\n";
-		cout << "\n\t   ------------------------------------------------------------\n";
+    cout << "\t" << setw(40) << setiosflags(ios::left) << "Nombre"
+         << setw(20) << setiosflags(ios::left) << "Especialidad ";
+    cout << setw(12) << setiosflags(ios::left) << "DNI ";
+    cout << setw(15) << setiosflags(ios::left) << "Telefono";
+    cout << setw(40) << setiosflags(ios::left) << "Centro de estudios " << endl;
 		for (int i = 0; i < nro_medicos; i++) {
-				cout << "\t\t"<<medicos[i].nombre <<" "<< medicos[i].apellidoP <<" "<< medicos[i].apellidoM  << endl;
-				cout << "\n\t\tEspecialidad: " << medicos[i].especialidad << endl;
-				cout << "\t\tNro DNI: " << medicos[i].DNI << endl;
-				cout << "\t\tNumero Telefonico: " << medicos[i].telefono << endl;
-				cout << "\t\tCentro de estudio: " << medicos[i].centroDeEstudio << endl;
-			
-			cout << "\n\t   ------------------------------------------------------------\n";
+			nombre_completo = string(medicos[i].nombre) + " " + string(medicos[i].apellidoP) + " " + string(medicos[i].apellidoM);
+			cout << "\t" << setw(40) << setiosflags(ios::left) << nombre_completo;
+			cout << setw(20) << setiosflags(ios::left) << medicos[i].especialidad;
+			cout << setw(12) << setiosflags(ios::left) << medicos[i].DNI;
+			cout << setw(15) << setiosflags(ios::left) << medicos[i].telefono;
+			cout << setw(40) << setiosflags(ios::left) << medicos[i].centroDeEstudio << endl;
 		}
 		pausar_pantalla();
 	}
-	
 }
 Medico *obtener_stu_archivo(int *n) {
 	FILE *archivo;
