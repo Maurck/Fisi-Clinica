@@ -1,8 +1,7 @@
 #include <iostream>
-#include <cstring>
 #include <cstdlib>
 #include <ctime>
-#include <string.h>
+#include <cstring>
 #include <iomanip>
 #include <sstream>
 
@@ -353,15 +352,7 @@ void opcion_agregar_cita() {
 							pausar_pantalla();
 							ninio = false;	
 						}
-					} else if(opcionTipoEsp == 3) {
-						if(pac.Genero != 'F') {
-							cout<<"\n\tSolo las mujeres pueden acceder a Ginecologia. "<<endl;
-							cout<<"\n\t";
-							pausar_pantalla();
-							mujer = false;
-						}	
-					} 
-
+					}	 
 				}
 			}while(!ninio || !mujer);
 
@@ -414,15 +405,19 @@ void opcion_agregar_cita() {
 
 				if(!fecha_valida(fCita,hCita) || !fecha_rango_valido(fCita) || !hora_rango_valido(hCita)) {
 					cout << "\n\tLa fecha de la cita es incorrecta." << endl;	
+					pausar_pantalla();
 				} else if(insertar_cita_archivo(cit)) {
 					cout << "\n\tLa cita fue creada satisfactoriamente" << endl;
+					pausar_pantalla();
 				} else {
 					cout<< "\n\tLa cita no se pudo crear correctamente, intentelo mas tarde " << endl;
+					pausar_pantalla();
 				}
 			}
 		} else {
 			cout << "\n\tEl paciente no existe" << endl;
 			cout << "\tIntentelo nuevamente" << endl;
+			pausar_pantalla();
 		}
 	}
 }
@@ -776,9 +771,11 @@ void opcion_crear_medico(){
 	
 		if(insertar_medico_archivo(user)) {
 			cout << "\n\t\t\t\t\tEl Medico fue creado con exito";
+			pausar_pantalla();
 		} else {
 			cout << "\n\tOcurrio un error al intentar crear el Medico" << endl;
 			cout << "\tIntentelo nuevamente" << endl;
+			pausar_pantalla();
 		}
 	} else {
 		cout << "\n\tEl Medico con DNI " << DNI << " ya existe.\n";
@@ -1117,6 +1114,7 @@ void opcion_crear_paciente(void){
 	existe_paciente(existe, dniPac, &pac);
 	if (existe) {
 		cout <<"\n\tEste paciente ya existe."<<endl;
+		pausar_pantalla();
 	} else {
 		pac.DNI = dniPac;	
 		cout << "\tApellido Paterno: ";
@@ -1207,9 +1205,11 @@ void opcion_crear_paciente(void){
 
 		if (insertar_paciente_archivo(pac)) {
 			cout << "\n\tLos datos fueron agregados satisfactoriamente" << endl;
+			pausar_pantalla();
 		} else {
 			cout << "\n\tExiste un error al intentar agregar los datos." << endl;
 			cout << "\n\tIntentelo nuevamente." << endl;
+			pausar_pantalla();
 		}	
 	}
 }
@@ -1398,9 +1398,11 @@ void opcion_realizar_consulta(void){
 
 		if (insertar_consulta_archivo(cons)) {
 			cout << "\n\tLa consulta fue registrada satisfactoriamente." << endl;
+			pausar_pantalla();
 		} else {
 			cout << "\n\tExiste un error al intentar registrar la consulta." << endl;
 			cout << "\n\tIntentelo nuevamente." << endl;
+			pausar_pantalla();
 		}	
 
 		cout<<"\n\tRECETA: ";
@@ -1417,9 +1419,11 @@ void opcion_realizar_consulta(void){
 
 		if (insertar_receta_archivo(rec)) {
 			cout << "\n\tLa receta fue registrada satisfactoriamente." << endl;
+			pausar_pantalla();
 		} else {
 			cout << "\n\tExiste un error al intentar registrar la receta." << endl;
 			cout << "\n\tIntentelo nuevamente." << endl;
+			pausar_pantalla();
 		}
 	}
 }
@@ -1820,9 +1824,9 @@ char med[30]="Medicina General",ped[30]="Pediatria",gin[30]="Ginecologia";
 }  
 
 void titulo_principal(void) {
-	cout << "\n     ======================================================================\n";
-	cout << "\t\t\t\t CLINICA FISI\n";
-	cout << "     ======================================================================\n";
+	cout << "\n             ======================================================================\n";
+	cout << "\t\t\t\t         CLINICA FISI\n";
+	cout << "             ======================================================================\n";
 }
 
 int obtener_entero() {
