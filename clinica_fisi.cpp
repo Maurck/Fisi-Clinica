@@ -1950,5 +1950,5 @@ void pausar_pantalla() {
 }
 
 void limpiar_pantalla(void) {
-  system("cls");
+  system("clear");
 }
